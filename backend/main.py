@@ -5,8 +5,10 @@ from models.users import User
 from models.balance import Statement
 from models.transactions import Transaction
 from database.base import Base
+from routers.users import router
 
 app = FastAPI()
+app.include_router(router)
 
 
 # @app.get("/")
