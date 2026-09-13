@@ -1,12 +1,15 @@
 from datetime import datetime
 
-from models.balance import Statement
-from models.transactions import Transaction
+
 from database.base import Base
 
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import DateTime, String
+from typing import TYPE_CHECKING
 
+if TYPE_CHECKING:
+    from .balance import Statement
+    from .transactions import Transaction
 
 class User(Base):
 

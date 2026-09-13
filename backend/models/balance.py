@@ -1,13 +1,16 @@
 from datetime import datetime
 from decimal import Decimal
 
-from models.transactions import Transaction
-from models.users import User
+
 from database.base import Base
 
 from sqlalchemy import DateTime, Float, ForeignKey, Numeric
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from typing import TYPE_CHECKING
 
+if TYPE_CHECKING:
+    from .users import User
+    from .transactions import Transaction
 class Statement(Base):
 
     __tablename__ = "statements"

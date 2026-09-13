@@ -6,9 +6,13 @@ from enum import Enum as PyEnum
 from sqlalchemy import DateTime, Enum as SqlEnum , String, Float
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from models.users import User
-from models.balance import Statement
+
 from database.base import Base
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .users import User
+    from .balance import Statement
 
 
 
