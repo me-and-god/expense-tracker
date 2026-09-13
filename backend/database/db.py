@@ -1,8 +1,10 @@
 
+from typing import AsyncGenerator
+
 from dotenv import load_dotenv
 import os
 
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
 
 
 # get the database url from the .env file
@@ -16,8 +18,21 @@ if not DB:
 
 
 #  create engine using the database connection
-engine = create_async_engine(DB)
+engine = create_async_engine(DB,echo=False,)
 
 SessionLocal = async_sessionmaker(
-    bind=engine
+    bind=engine,
+    class_=AsyncSession,
+    expire_on_commit=False,  # Prevents attributes from expiring after commit (crucial in async)
+    autocommit=False,
+    autoflush=False,
 )
+
+
+async def get_db()-> AsyncGenerator[AsyncSession, None]:
+
+    async with SessionLocal() as session:
+        try:
+            yield session
+        finally:
+            await session.close()
