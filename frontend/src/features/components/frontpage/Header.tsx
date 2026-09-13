@@ -1,3 +1,4 @@
+import Link from "next/link"
 import icon from "../../../../public/icon.png"
 import Image from "next/image"
 
@@ -15,8 +16,8 @@ const Header = () => {
 
 
         <div className="flex gap-3 md:gap-5 items-center">
-            <button className="btn-black transition duration-300">Login</button>
-            <button className="btn-black transition duration-300">Sign up</button>
+            <Link href={"/login"} className="btn-black transition duration-300">Login</Link>
+            <Link href={"/signup"} className="btn-black transition duration-300">Sign up</Link>
         </div>
 
     </div>

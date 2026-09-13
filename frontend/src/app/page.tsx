@@ -1,8 +1,12 @@
+import Header from "@/features/components/frontpage/Header";
+import Link from "next/link";
 
 
 export default function Home() {
 
   return (
+    <>
+            <Header/>
       <div className="flex flex-col justify-center items-center">
 
         <div className="mt-15 md:mt-20 text-2xl md:text-5xl font-extrabold flex flex-col items-center">
@@ -27,16 +31,17 @@ export default function Home() {
           <div className="flex gap-5 md:gap-30 flex-col md:flex-row items-center mt-3 md:mt-5">
             <div className="flex flex-col items-center">
               <p className="text-[15px]">Already an user</p>
-              <button className="btn-black">Sign In</button>
+              <Link  href={"/login"} className="btn-black">Sign In</Link>
             </div>
 
             <div className="flex flex-col items-center">
               <p>New User</p>
-              <button className="btn-black">Register</button>
+              <Link href={"/signup"} className="btn-black">Register</Link>
             </div>
           </div>
         </div>
 
       </div>
+    </>
   );
 }

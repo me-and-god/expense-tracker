@@ -20,5 +20,8 @@ class UserResponse(BaseModel):
     created_at: datetime
 
 
+class ValidateLogin(BaseModel):
+    name: str 
+    email: str
 
 
