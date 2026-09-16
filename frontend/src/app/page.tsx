@@ -10,7 +10,7 @@ export default function Home() {
       <div className="flex flex-col justify-center items-center">
 
         <div className="mt-15 md:mt-20 text-2xl md:text-5xl font-extrabold flex flex-col items-center">
-          <p>Problem in managing Your Money ?</p>
+          <p className="px-3 text-center">Problem in managing Your Money ?</p>
           <p className="bg-linear-120 from-black via-emerald-600 to-emerald-800 bg-clip-text text-transparent p-2 tracking-wide text-4xl md:text-6xl md:p-4 ">We got you</p>
         </div>
 

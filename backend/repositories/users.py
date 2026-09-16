@@ -1,14 +1,13 @@
 
-from fastapi import Depends, HTTPException
+from fastapi import HTTPException
 from sqlalchemy import insert, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from database.db import get_db
 from models.users import User
 from schemas.users import UserCreate, ValidateLogin
 
 
-async def Repo_CreateUser( user: UserCreate, session: AsyncSession = Depends(get_db)):
+async def Repo_CreateUser( user: UserCreate, session: AsyncSession):
 
     newUser = User( name= user.name, email=user.email)
 
@@ -21,7 +20,7 @@ async def Repo_CreateUser( user: UserCreate, session: AsyncSession = Depends(get
 
 
 
-async def Repo_checkUser( data: ValidateLogin, session: AsyncSession = Depends(get_db)):
+async def Repo_checkUser( data: ValidateLogin, session: AsyncSession):
 
     stmt = select(User).where(User.name.ilike(data.name), User.email == data.email)
 
@@ -30,3 +29,20 @@ async def Repo_checkUser( data: ValidateLogin, session: AsyncSession = Depends(g
 
 
     return user
+
+
+
+
+async def Repo_getUser(id: int, session: AsyncSession):
+
+    stmt = select(User).where(User.id == id)
+
+    result = await session.execute(stmt)
+
+    return result.scalar_one_or_none()
+
+
+
+
+
+
