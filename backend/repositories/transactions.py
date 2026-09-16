@@ -42,3 +42,24 @@ async def Repo_getStats(
     "total_income": row.total_income,
     "balance": row.balance
 }
+
+
+
+
+# get transactions
+
+async def Repo_getTransactions(
+        user_id: int,
+        session: AsyncSession
+):
+
+    stmt = (
+        select(Transaction)
+        .where(
+            Transaction.user_id == user_id
+        )
+    )
+
+    result = await session.execute(stmt)
+    transactions = result.scalars()
+    return transactions

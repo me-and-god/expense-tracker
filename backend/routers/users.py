@@ -1,9 +1,12 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from services.transactions import Service_getStats
+from schemas.transactions import TransactionResponse
+from services.transactions import Service_getStats, Service_getTransactions
 from services.users import Service_CreateUser, Service_checkUser, Service_getUser
 from database.db import get_db
 from schemas.users import UserResponse, UserCreate, ValidateLogin
+from datetime import datetime
+from typing import cast
 
 router = APIRouter( prefix="/user", tags=["Users"])
 
@@ -52,10 +55,36 @@ async def getUserById(
 
 
 
-
+# get dashboard stats
 @router.get("/{id}/dashboard")
 async def getStats(id: int, session: AsyncSession = Depends(get_db)):
 
     result =  await Service_getStats(id, session)
 
+    return result
+
+
+
+
+#  get transactions
+@router.get("/{id}/transactions", response_model=list[TransactionResponse])
+async def getTransactions(
+    id: int,
+    session: AsyncSession = Depends(get_db)
+):
+
+    transactions = await Service_getTransactions(id, session)
+
+    result = [
+        TransactionResponse(
+            id=row.id,
+            user_id=row.user_id,
+            type=row.type,
+            category=row.category,
+            amount=int(row.amount),
+            created_at=cast(datetime, row.created_at),
+            updated_at=cast(datetime, row.updated_at),
+        )
+        for row in transactions
+    ]
     return result

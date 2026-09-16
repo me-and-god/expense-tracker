@@ -41,3 +41,13 @@ export async function getUserStats( {id}: Props) {
 
     return stats
 }
+
+
+
+
+
+// get transactions
+
+export async function getTransactions( { id }: Props ) {
+    const response = await fetch(``)
+}
