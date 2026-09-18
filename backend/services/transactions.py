@@ -17,7 +17,7 @@ async def Service_getStats(
         raise HTTPException(status_code=404, detail="user does not exist")
 
     
-    return  await Repo_getStats(user_id=user_id, session=session)
+    return  await Repo_getStats(user_id=user_id, session=session) # type: ignore
 
 
 
