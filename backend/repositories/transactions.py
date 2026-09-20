@@ -1,6 +1,7 @@
-from sqlalchemy import select, func
+from sqlalchemy import insert, select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from schemas.transactions import NewTransaction
 from models.transactions import Transaction
 
 
@@ -63,3 +64,23 @@ async def Repo_getTransactions(
     result = await session.execute(stmt)
     transactions = result.scalars()
     return transactions
+
+
+
+
+
+
+
+# new transaction
+async def Repo_newTransaction(
+        session: AsyncSession,
+        NewTran: NewTransaction
+):
+
+    Tran = Transaction(**NewTran.model_dump())
+
+    session.add(Tran)
+    await session.commit()
+    await session.refresh(Tran)
+
+    return Tran

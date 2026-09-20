@@ -17,7 +17,7 @@ const layout = async({ children,params }: PageProps) => {
     
     return (
         <div>
-            <Header user={user}/>
+            <Header user={user} />
             {children}
         </div>
     );

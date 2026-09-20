@@ -1,9 +1,9 @@
 from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from schemas.transactions import TransactionResponse
+from schemas.transactions import NewTransaction, TransactionResponse
 from repositories.users import Repo_getUser
-from repositories.transactions import Repo_getStats, Repo_getTransactions
+from repositories.transactions import Repo_getStats, Repo_getTransactions, Repo_newTransaction
 
 
 # get stats
@@ -36,3 +36,21 @@ async def Service_getTransactions(
 
 
     return transactions
+
+
+
+
+
+
+# add new transaction
+async def Service_newTransaction(
+        Data: NewTransaction,
+        session: AsyncSession
+):
+
+    newTran = await Repo_newTransaction(
+        session,
+        Data
+    )
+
+    return newTran

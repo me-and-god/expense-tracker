@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from sqlalchemy import ForeignKey, Numeric
+from sqlalchemy import ForeignKey, Numeric, func
 from datetime import datetime
 from enum import Enum as PyEnum
 from sqlalchemy import DateTime, Enum as SqlEnum , String, Float
@@ -55,9 +55,18 @@ class Transaction(Base):
                 )
 
     description : Mapped[str | None]        = mapped_column(    String(60), nullable=True                   )
-    created_at  : Mapped[DateTime]          = mapped_column(    DateTime, nullable=False                    )
-    updated_at  : Mapped[DateTime]          = mapped_column(    DateTime, default=datetime.utcnow(), nullable=False)
+    created_at: Mapped[datetime]            = mapped_column(
+                                                DateTime(timezone=True),
+                                                server_default=func.now(),
+                                                nullable=False
+                                            )
 
+    updated_at: Mapped[datetime]            = mapped_column(
+                                                DateTime(timezone=True),
+                                                server_default=func.now(),
+                                                onupdate=func.now(),
+                                                nullable=False
+                                            )
 
 
     user        : Mapped["User"] = relationship(

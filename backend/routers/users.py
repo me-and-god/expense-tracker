@@ -1,7 +1,9 @@
+from decimal import Decimal
+
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from schemas.transactions import TransactionResponse
-from services.transactions import Service_getStats, Service_getTransactions
+from schemas.transactions import NewTransaction, TransactionResponse
+from services.transactions import Service_getStats, Service_getTransactions, Service_newTransaction
 from services.users import Service_CreateUser, Service_checkUser, Service_getUser
 from database.db import get_db
 from schemas.users import UserResponse, UserCreate, ValidateLogin
@@ -81,10 +83,28 @@ async def getTransactions(
             user_id=row.user_id,
             type=row.type,
             category=row.category,
-            amount=int(row.amount),
+            amount=cast(Decimal, row.amount),
             created_at=cast(datetime, row.created_at),
             updated_at=cast(datetime, row.updated_at),
         )
         for row in transactions
     ]
     return result
+
+
+
+
+
+# add new transaction
+@router.post("/transaction", response_model=TransactionResponse)
+async def AddNewTransaction(
+    Data: NewTransaction,
+    session: AsyncSession = Depends(get_db)
+):
+
+    newTran = await Service_newTransaction(
+        Data=Data,
+        session=session
+    )
+
+    return newTran
