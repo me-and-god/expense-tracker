@@ -48,8 +48,13 @@ export async function getUserStats( {id}: Props) {
 
 // get transactions
 
-export async function getTransactions({ id } : Props ) {
-    const response = await fetch(`http://127.0.0.1:8000/user/${id}/transactions`)
+type PageProps = {
+    user_id: number;
+}
+
+
+export async function getTransactions( { user_id } : PageProps ) {
+    const response = await fetch(`http://127.0.0.1:8000/user/${user_id}/transactions`)
 
     const transactions = await response.json()
 

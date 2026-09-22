@@ -1,7 +1,7 @@
 "use client";
 
 import { AddTransaction } from "@/features/DBquery/queries";
-import {BanknoteArrowUp,BanknoteArrowDown,IndianRupee,Plus, Check,} from "lucide-react";
+import {BanknoteArrowUp,BanknoteArrowDown,IndianRupee,Plus, Check, CircleAlert,} from "lucide-react";
 import { redirect, useParams } from "next/navigation";
 import { useState } from "react";
 
@@ -115,7 +115,7 @@ const NewTransaction = () => {
 
     setTimeout(() => {
       redirect(`/${Number(params.user_id)}/transactions`)
-    }, 3000);
+    }, 2000);
     
   }
 
@@ -189,7 +189,7 @@ const NewTransaction = () => {
             </p>
 
             {errors.category && (
-              <p className="text-red-500 font-medium">
+              <p className="text-red-500 font-medium md:mr-20">
                 {errors.category}
               </p>
             )}
@@ -250,7 +250,7 @@ const NewTransaction = () => {
             </p>
 
             {errors.amount && (
-              <p className="text-red-500 font-medium">
+              <p className="text-red-500 font-medium md:mr-20">
                 {errors.amount}
               </p>
             )}
@@ -305,7 +305,7 @@ const NewTransaction = () => {
             </p>
 
             {errors.date && (
-              <p className="text-red-500 font-medium">
+              <p className="text-red-500 font-medium md:mr-20">
                 {errors.date}
               </p>
             )}
@@ -314,7 +314,7 @@ const NewTransaction = () => {
           <div className="flex md:mx-15 gap-3 items-center p-2 md:p-3 text-[18px] md:text-[20px] outline font-semibold has-focus:outline-2 rounded-[5px]">
             <input
               className="w-full outline-none"
-              type="datetime-local"
+              type="date"
               name="date"
             />
           </div>
@@ -351,9 +351,9 @@ const NewTransaction = () => {
 
       <>
         <div id="overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-md">
-          <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
-            <h2 className="text-xl font-semibold text-gray-900">Centered Modal</h2>
-            <p className="mt-2 text-sm text-gray-600">{resultStat.error}</p>
+          <div className=" flex flex-col gap-3 md:gap-10 justify-center items-center p-5 md:p-10 rounded-2xl bg-white shadow-2xl">
+            <h2 className="text-xl font-semibold text-gray-900"><CircleAlert size={256} color="#d71414" strokeWidth={3} /></h2>
+            <p className="mt-2 text-[18px] md:text-[22px] font-semibold text-gray-600">{resultStat.error}</p>
           </div>
         </div>
       </>

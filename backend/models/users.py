@@ -4,7 +4,7 @@ from datetime import datetime
 from database.base import Base
 
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import DateTime, String
+from sqlalchemy import DateTime, Integer, String
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:

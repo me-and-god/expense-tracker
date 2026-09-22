@@ -1,4 +1,6 @@
-import { Plus } from "lucide-react";
+import SearchSection from "@/features/components/transactions/search-transactions";
+import TransHistory from "@/features/components/transactions/TransHistory";
+import { Plus, Search } from "lucide-react";
 import Link from "next/link";
 
 type PageParams = {
@@ -11,9 +13,9 @@ const TransactionPage = async({ params, }: PageParams) => {
     const { user_id } = await params;
 
   return (
-    <div>
+    <div className="px-5 md:px-20">
 
-        <div className="flex justify-between px-5 md:px-20 items-center">
+        <div className="flex justify-between  items-center">
             <p className="text-2xl md:text-4xl font-bold tracking-wide p-3 md:p-10 ">Transactions</p>
             <Link href={`/${user_id}/transactions/new`} className="flex gap-2 bg-black text-white items-center p-2 md:p-3 px-3 md:px-4 rounded-[10px] hover:scale-103 transition-all duration-300">
                 <Plus strokeWidth={3} className="hidden md:flex"/>
@@ -21,9 +23,8 @@ const TransactionPage = async({ params, }: PageParams) => {
             </Link>
         </div>
 
-        <div>
-            
-        </div>
+        <SearchSection />
+        <TransHistory user_id={user_id} />
     </div>
   )
 }
