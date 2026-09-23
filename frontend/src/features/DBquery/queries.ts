@@ -50,11 +50,28 @@ export async function getUserStats( {id}: Props) {
 
 type PageProps = {
     user_id: number;
+    searchParams: {
+        search?: string;
+        from?: Date;
+        to?: Date
+    };
 }
 
 
-export async function getTransactions( { user_id } : PageProps ) {
-    const response = await fetch(`http://127.0.0.1:8000/user/${user_id}/transactions`)
+export async function getTransactions( { user_id, searchParams } : PageProps ) {
+    const { search, from, to } = searchParams;
+    const response = await fetch('http://127.0.0.1:8000/user/transactions', {
+        method: "POST",
+        headers: {
+            "Content-Type":"application/json"
+        },
+        body: JSON.stringify({
+            user_id: user_id,
+            search: search,
+            fromDate: from,
+            toDate: to,
+        })
+    })
 
     const transactions = await response.json()
 

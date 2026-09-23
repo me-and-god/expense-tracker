@@ -1,16 +1,23 @@
 import SearchSection from "@/features/components/transactions/search-transactions";
 import TransHistory from "@/features/components/transactions/TransHistory";
-import { Plus, Search } from "lucide-react";
+import { Plus } from "lucide-react";
 import Link from "next/link";
+
 
 type PageParams = {
     params : Promise<{
         user_id:number
+    }>;
+    searchParams: Promise<{
+        search?: string;
+        from?: Date;
+        to?: Date;
     }>
 }
 
-const TransactionPage = async({ params, }: PageParams) => {
+const TransactionPage = async({ params, searchParams}: PageParams) => {
     const { user_id } = await params;
+    const { search, from, to } = await searchParams;
 
   return (
     <div className="px-5 md:px-20">
@@ -24,7 +31,7 @@ const TransactionPage = async({ params, }: PageParams) => {
         </div>
 
         <SearchSection />
-        <TransHistory user_id={user_id} />
+        <TransHistory user_id={user_id} searchParams={{search, from, to}} />
     </div>
   )
 }

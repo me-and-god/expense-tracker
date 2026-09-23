@@ -1,7 +1,16 @@
 import { getTransactions } from "@/features/DBquery/queries";
+import incomeIcon from "../../../../public/profits.png"
+import expenseIcon from "../../../../public/dollar.png"
+import Image from "next/image";
+
 
 type Props = {
     user_id: number;
+    searchParams: {
+        search?: string;
+        from?: Date;
+        to?: Date
+    };
 }
 
 
@@ -19,9 +28,11 @@ type Transaction =[
 
 
 
-const TransHistory = async( {user_id}: Props) => {
+const TransHistory = async( { user_id , searchParams }: Props) => {
 
-    const transactions: Transaction = await getTransactions({user_id} );
+
+
+    const transactions: Transaction = await getTransactions({user_id , searchParams} );
 
 
   return (
@@ -47,13 +58,39 @@ const TransHistory = async( {user_id}: Props) => {
                 transactions.map(tran => (
                             <div key={tran.id} className="flex justify-around  font-semibold ">
 
-                                    <p>{new Date(tran.created_at).toLocaleDateString()}</p>
+                                    <div className="flex  justify-center w-full">
 
-                                    <p>{tran.category}</p>
+                                        <p>{new Date(tran.created_at).toLocaleDateString().replaceAll("/",".")}</p>
+                                    </div>
 
-                                    <p className={`${tran.type === "INCOME" ? "text-green-500" : "text-red-500"}`}>{tran.type}</p>
+                                    <div className="flex  justify-center w-full">
 
-                                    <p>{tran.amount}</p>
+                                        <p>{tran.category}</p>
+                                    </div>
+
+
+                                    <div className="flex justify-center w-full">
+
+                                    {
+                                        tran.type === "INCOME" ? (
+
+                                            <div className="flex gap-2 md:gap-4 items-center">
+                                                <Image src={incomeIcon} alt="" width={20}></Image>
+                                                <p className="text-green-500">{tran.type}</p>
+                                            </div>
+                                        ) : (
+                                            <div className="flex gap-2 md:gap-4 items-center">
+                                                <Image src={expenseIcon} alt="" width={20}></Image>
+                                                <p className="text-red-500">{tran.type}</p>
+                                            </div>
+                                        )
+                                    }
+                                    </div>
+
+                                    <div className="flex  justify-center w-full">
+
+                                        <p>{tran.amount}</p>
+                                    </div>
 
                             </div>
                 ))

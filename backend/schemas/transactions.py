@@ -27,3 +27,10 @@ class NewTransaction(BaseModel):
     description: str | None = None
     created_at: datetime
 
+
+
+class TransactionQuery(BaseModel):
+    user_id: int
+    search: str | None = None
+    fromDate: datetime | None = None
+    toDate : datetime | None = None

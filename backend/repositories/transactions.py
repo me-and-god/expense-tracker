@@ -1,7 +1,7 @@
-from sqlalchemy import insert, select, func
+from sqlalchemy import String, and_, cast, insert, or_, select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from schemas.transactions import NewTransaction
+from schemas.transactions import NewTransaction, TransactionQuery
 from models.transactions import Transaction
 
 
@@ -50,16 +50,34 @@ async def Repo_getStats(
 # get transactions
 
 async def Repo_getTransactions(
-        user_id: int,
+        Data: TransactionQuery,
         session: AsyncSession
 ):
 
     stmt = (
         select(Transaction)
         .where(
-            Transaction.user_id == user_id
+            Transaction.user_id == Data.user_id
         )
     )
+
+    if Data.search is not None:
+        stmt = stmt.where(
+            or_(
+                cast(Transaction.category, String).ilike(f"%{Data.search}%"),
+                Transaction.description.ilike(f"%{Data.search}%")
+            )
+        )
+
+    if Data.fromDate is not None and Data.toDate is not None:
+        stmt = stmt.where(
+            and_(
+                Transaction.created_at >= Data.fromDate,
+                Transaction.created_at <= Data.toDate
+            )
+        )
+
+    stmt = stmt.order_by(Transaction.created_at.desc())
 
     result = await session.execute(stmt)
     transactions = result.scalars()
