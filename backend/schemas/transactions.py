@@ -15,7 +15,14 @@ class TransactionResponse(BaseModel):
     amount: Decimal
     description: str | None = None
     created_at: datetime
-    updated_at: datetime
+
+
+class ReturnResponse(BaseModel):
+
+    items: list[TransactionResponse]
+    total: int
+    totalpages: int
+
 
 
 
@@ -34,3 +41,4 @@ class TransactionQuery(BaseModel):
     search: str | None = None
     fromDate: datetime | None = None
     toDate : datetime | None = None
+    page: int = Field(default=1)

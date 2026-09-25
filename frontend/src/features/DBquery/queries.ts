@@ -50,26 +50,28 @@ export async function getUserStats( {id}: Props) {
 
 type PageProps = {
     user_id: number;
-    searchParams: {
-        search?: string;
-        from?: Date;
-        to?: Date
-    };
+    search?: string;
+    from?: string;
+    to?: string;
+    page?: number;
+
 }
 
 
-export async function getTransactions( { user_id, searchParams } : PageProps ) {
-    const { search, from, to } = searchParams;
+export async function getTransactions(  data  : PageProps ) {
+
     const response = await fetch('http://127.0.0.1:8000/user/transactions', {
         method: "POST",
         headers: {
             "Content-Type":"application/json"
         },
+        cache: "no-store",
         body: JSON.stringify({
-            user_id: user_id,
-            search: search,
-            fromDate: from,
-            toDate: to,
+            user_id: data.user_id,
+            search: data.search,
+            fromDate: data.from,
+            toDate: data.to,
+            page: data.page,
         })
     })
 
@@ -80,9 +82,9 @@ export async function getTransactions( { user_id, searchParams } : PageProps ) {
             return {
                 "error" : transactions.detail || "user not found"
             }
-        } else {
+        }  else {
             return {
-                "error" : "something went wrong"
+                "error": "something went wrong"
             }
         }
     }

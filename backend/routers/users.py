@@ -2,7 +2,7 @@ from decimal import Decimal
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from schemas.transactions import NewTransaction, TransactionQuery, TransactionResponse
+from schemas.transactions import NewTransaction, ReturnResponse, TransactionQuery, TransactionResponse
 from services.transactions import Service_getStats, Service_getTransactions, Service_newTransaction
 from services.users import Service_CreateUser, Service_checkUser, Service_getUser
 from database.db import get_db
@@ -69,7 +69,7 @@ async def getStats(id: int, session: AsyncSession = Depends(get_db)):
 
 
 #  get transactions
-@router.post("/transactions", response_model=list[TransactionResponse])
+@router.post("/transactions")
 async def getTransactions(
     Data: TransactionQuery,
     session: AsyncSession = Depends(get_db)
@@ -77,19 +77,7 @@ async def getTransactions(
 
     transactions = await Service_getTransactions(Data, session)
 
-    result = [
-        TransactionResponse(
-            id=row.id,
-            user_id=row.user_id,
-            type=row.type,
-            category=row.category,
-            amount=cast(Decimal, row.amount),
-            created_at=cast(datetime, row.created_at),
-            updated_at=cast(datetime, row.updated_at),
-        )
-        for row in transactions
-    ]
-    return result
+    return transactions
 
 
 

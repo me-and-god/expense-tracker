@@ -1,7 +1,11 @@
+from datetime import datetime
+from decimal import Decimal
+from typing import cast
+
 from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from schemas.transactions import NewTransaction, TransactionQuery, TransactionResponse
+from schemas.transactions import NewTransaction, ReturnResponse, TransactionQuery, TransactionResponse
 from repositories.users import Repo_getUser
 from repositories.transactions import Repo_getStats, Repo_getTransactions, Repo_getTransactions, Repo_newTransaction
 
@@ -32,7 +36,6 @@ async def Service_getTransactions(
         raise HTTPException(status_code=404, detail="user not found")
 
     transactions = await Repo_getTransactions( Data, session) # type: ignore
-
 
 
     return transactions

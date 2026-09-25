@@ -10,14 +10,27 @@ type PageParams = {
     }>;
     searchParams: Promise<{
         search?: string;
-        from?: Date;
-        to?: Date;
+        from?: string;
+        to?: string;
+        page?: string;
     }>
 }
 
+export const dynamic = 'force-dynamic';
+
 const TransactionPage = async({ params, searchParams}: PageParams) => {
-    const { user_id } = await params;
-    const { search, from, to } = await searchParams;
+  const { user_id } = await params;
+  const filter = await searchParams;
+  const pageNo = filter?.page ? Number(filter.page) : 1;
+
+  console.log(pageNo)
+  const data = {
+    user_id,
+    search: filter.search ?? undefined,
+    from: filter.from ?? undefined,
+    to: filter.to ?? undefined,
+    page: pageNo,
+  };
 
   return (
     <div className="px-5 md:px-20">
@@ -31,7 +44,7 @@ const TransactionPage = async({ params, searchParams}: PageParams) => {
         </div>
 
         <SearchSection />
-        <TransHistory user_id={user_id} searchParams={{search, from, to}} />
+        <TransHistory data={data} />
     </div>
   )
 }

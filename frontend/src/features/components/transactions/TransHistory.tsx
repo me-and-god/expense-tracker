@@ -2,40 +2,46 @@ import { getTransactions } from "@/features/DBquery/queries";
 import incomeIcon from "../../../../public/profits.png"
 import expenseIcon from "../../../../public/dollar.png"
 import Image from "next/image";
+import Pagination from "@/features/utils/pagination";
 
 
-type Props = {
-    user_id: number;
-    searchParams: {
-        search?: string;
-        from?: Date;
-        to?: Date
-    };
+type TransactionItem = {
+    items: [
+        {
+            id: number;
+            user_id: number;
+            category: string;
+            type: string;
+            amount: number;
+            description: string;
+            created_at: Date;
+        }
+    ]
+    total: number;
+    total_pages: number
+
+};
+
+type props = {
+    data : {
+        user_id: number,
+        search: string,
+        from: string,
+        to: string,
+        page: number,
+    }
 }
 
-
-type Transaction =[
-    {
-        id: number;
-        user_id: number;
-        category: string;
-        type: string;
-        amount: number;
-        created_at: Date;
-        updated_at: Date;
-    }
-] 
+const TransHistory = async ( {data} : props) => {
 
 
+  console.log(data)
 
-const TransHistory = async( { user_id , searchParams }: Props) => {
-
-
-
-    const transactions: Transaction = await getTransactions({user_id , searchParams} );
-
-
+  const transactions: TransactionItem = await getTransactions(data);
+  console.log(transactions)
   return (
+
+    <section className="flex flex-col">
     <div className="md:p-10 mt-10 bg-gray-200">
         <div className="flex justify-around bg-black text-white p-1 font-black">
             <div>
@@ -55,7 +61,7 @@ const TransHistory = async( { user_id , searchParams }: Props) => {
 
         <div className="flex flex-col gap-3 mt-5 ">
             {
-                transactions.map(tran => (
+                transactions.items.map(tran => (
                             <div key={tran.id} className="flex justify-around  font-semibold ">
 
                                     <div className="flex  justify-center w-full">
@@ -95,8 +101,15 @@ const TransHistory = async( { user_id , searchParams }: Props) => {
                             </div>
                 ))
             }
+
         </div>
     </div>
+
+
+
+    {/* pagination */}
+    <Pagination totalPages={transactions.total_pages}/>
+    </section>
   )
 }
 
