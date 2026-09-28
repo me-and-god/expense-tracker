@@ -140,3 +140,25 @@ export async function AddTransaction( { user_id, Data } : TransactionData) {
 
     return NewTran
 }
+
+
+
+
+// get transaction data
+type TransProps = {
+    user_id: number;
+    transaction_id: number;
+};
+
+export async function getTransactionData( ID : TransProps) {
+    const response = await fetch(`http://127.0.0.1:8000/user/${ID.user_id}/transaction/${ID.transaction_id}`);
+    const data = await response.json();
+
+    if (!response.ok) {
+        if (response.status == 404) {
+            return {"error": data.detail}
+        }
+    }
+
+    return data
+}

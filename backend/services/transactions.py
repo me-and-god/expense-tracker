@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from schemas.transactions import NewTransaction, ReturnResponse, TransactionQuery, TransactionResponse
 from repositories.users import Repo_getUser
-from repositories.transactions import Repo_getStats, Repo_getTransactions, Repo_getTransactions, Repo_newTransaction
+from repositories.transactions import Repo_getAtransaction, Repo_getStats, Repo_getTransactions, Repo_getTransactions, Repo_newTransaction
 
 
 # get stats
@@ -57,3 +57,26 @@ async def Service_newTransaction(
     )
 
     return newTran
+
+
+
+# get a transaction
+async def Service_getAtransaction(
+        user_id: int,
+        transaction_id: int,
+        session: AsyncSession
+):
+
+    user  = await Repo_getUser( user_id, session)
+
+    if not user:
+        raise HTTPException( status_code=404, detail="user not found")
+
+
+    Transaction = await Repo_getAtransaction(user_id, transaction_id, session)
+
+    if not Transaction:
+        raise HTTPException(status_code=404, detail="transaction not found")
+
+
+    return Transaction

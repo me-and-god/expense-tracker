@@ -139,3 +139,25 @@ async def Repo_newTransaction(
     await session.refresh(Tran)
 
     return Tran
+
+
+
+
+
+# get a transaction data
+async def Repo_getAtransaction(
+        user_id: int,
+        transaction_id: int,
+        session: AsyncSession
+):
+
+    stmt = select(Transaction).where(
+        and_(
+            Transaction.user_id == user_id,
+            Transaction.id == transaction_id
+        )
+    )
+
+    result = await session.execute(stmt)
+
+    return result.scalar_one_or_none()

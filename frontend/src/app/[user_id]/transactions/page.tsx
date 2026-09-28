@@ -44,7 +44,7 @@ const TransactionPage = async({ params, searchParams}: PageParams) => {
         </div>
 
         <SearchSection />
-        <TransHistory data={data} />
+        <TransHistory data={data} /> 
     </div>
   )
 }

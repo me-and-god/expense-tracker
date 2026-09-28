@@ -3,7 +3,7 @@ from decimal import Decimal
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from schemas.transactions import NewTransaction, ReturnResponse, TransactionQuery, TransactionResponse
-from services.transactions import Service_getStats, Service_getTransactions, Service_newTransaction
+from services.transactions import Service_getAtransaction, Service_getStats, Service_getTransactions, Service_newTransaction
 from services.users import Service_CreateUser, Service_checkUser, Service_getUser
 from database.db import get_db
 from schemas.users import UserResponse, UserCreate, ValidateLogin
@@ -96,3 +96,18 @@ async def AddNewTransaction(
     )
 
     return newTran
+
+
+
+
+# get a transaction data
+@router.get("/{user_id}/transaction/{transaction_id}")
+async def getAtransaction(
+    user_id: int,
+    transaction_id: int,
+    session: AsyncSession = Depends(get_db)
+):
+
+    TranData = await Service_getAtransaction( user_id, transaction_id, session)
+
+    return TranData

@@ -2,7 +2,11 @@ import { getTransactions } from "@/features/DBquery/queries";
 import incomeIcon from "../../../../public/profits.png"
 import expenseIcon from "../../../../public/dollar.png"
 import Image from "next/image";
+import Link from "next/link";
 import Pagination from "@/features/utils/pagination";
+import { Suspense } from "react";
+import LoadData from "@/features/utils/LoadData";
+
 
 
 type TransactionItem = {
@@ -34,7 +38,6 @@ type props = {
 
 const TransHistory = async ( {data} : props) => {
 
-
   console.log(data)
 
   const transactions: TransactionItem = await getTransactions(data);
@@ -59,48 +62,52 @@ const TransHistory = async ( {data} : props) => {
         </div>
 
 
-        <div className="flex flex-col gap-3 mt-5 ">
-            {
-                transactions.items.map(tran => (
-                            <div key={tran.id} className="flex justify-around  font-semibold ">
+        <div className="flex flex-col gap-3 mt-5 " >
 
-                                    <div className="flex  justify-center w-full">
+            <Suspense fallback={<LoadData />}>
+                
+                {
+                    transactions.items.map(tran => (
+                                <Link key={tran.id} href={`/${data.user_id}/transactions/${tran.id}`} className="flex justify-around font-semibold transition-all duration-100 hover:bg-gray-700 hover:rounded-2xl hover:text-white">
 
-                                        <p>{new Date(tran.created_at).toLocaleDateString().replaceAll("/",".")}</p>
-                                    </div>
+                                        <div className="flex  justify-center w-full ">
 
-                                    <div className="flex  justify-center w-full">
+                                            <p>{new Date(tran.created_at).toLocaleDateString().replaceAll("/",".")}</p>
+                                        </div>
 
-                                        <p>{tran.category}</p>
-                                    </div>
+                                        <div className="flex  justify-center w-full ">
+
+                                            <p>{tran.category}</p>
+                                        </div>
 
 
-                                    <div className="flex justify-center w-full">
+                                        <div className="flex justify-center w-full">
 
-                                    {
-                                        tran.type === "INCOME" ? (
+                                        {
+                                            tran.type === "INCOME" ? (
 
-                                            <div className="flex gap-2 md:gap-4 items-center">
-                                                <Image src={incomeIcon} alt="" width={20}></Image>
-                                                <p className="text-green-500">{tran.type}</p>
-                                            </div>
-                                        ) : (
-                                            <div className="flex gap-2 md:gap-4 items-center">
-                                                <Image src={expenseIcon} alt="" width={20}></Image>
-                                                <p className="text-red-500">{tran.type}</p>
-                                            </div>
-                                        )
-                                    }
-                                    </div>
+                                                <div className="flex gap-2 md:gap-4 items-center">
+                                                    <Image src={incomeIcon} alt="" width={20}></Image>
+                                                    <p className="text-green-500">{tran.type}</p>
+                                                </div>
+                                            ) : (
+                                                <div className="flex gap-2 md:gap-4 items-center">
+                                                    <Image src={expenseIcon} alt="" width={20}></Image>
+                                                    <p className="text-red-500">{tran.type}</p>
+                                                </div>
+                                            )
+                                        }
+                                        </div>
 
-                                    <div className="flex  justify-center w-full">
+                                        <div className="flex  justify-center w-full">
 
-                                        <p>{tran.amount}</p>
-                                    </div>
+                                            <p>{tran.amount}</p>
+                                        </div>
 
-                            </div>
-                ))
-            }
+                                </Link>
+                    ))
+                }
+            </Suspense>
 
         </div>
     </div>

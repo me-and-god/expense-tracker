@@ -1,6 +1,7 @@
 "use client";
 
 import { AddTransaction } from "@/features/DBquery/queries";
+import RouteToPage from "@/features/utils/RouteToPage";
 import {BanknoteArrowUp,BanknoteArrowDown,IndianRupee,Plus, Check, CircleAlert,} from "lucide-react";
 import { redirect, useParams } from "next/navigation";
 import { useState } from "react";
@@ -121,6 +122,7 @@ const NewTransaction = () => {
 
   return (
     <div>
+      <RouteToPage />
       {/* Type */}
 
       <div className="p-5 md:p-7 px-7 md:px-15 flex flex-col gap-2 md:gap-4">
