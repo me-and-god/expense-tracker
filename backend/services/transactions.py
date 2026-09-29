@@ -5,9 +5,9 @@ from typing import cast
 from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from schemas.transactions import NewTransaction, ReturnResponse, TransactionQuery, TransactionResponse
+from schemas.transactions import NewTransaction, ReturnResponse, TransactionQuery, TransactionResponse, TransactionUpdate
 from repositories.users import Repo_getUser
-from repositories.transactions import Repo_getAtransaction, Repo_getStats, Repo_getTransactions, Repo_getTransactions, Repo_newTransaction
+from repositories.transactions import Repo_UpdateTransaction, Repo_deleteTransaction, Repo_getAtransaction, Repo_getStats, Repo_getTransactions, Repo_getTransactions, Repo_newTransaction
 
 
 # get stats
@@ -75,8 +75,43 @@ async def Service_getAtransaction(
 
     Transaction = await Repo_getAtransaction(user_id, transaction_id, session)
 
-    if not Transaction:
+    if Transaction is None:
         raise HTTPException(status_code=404, detail="transaction not found")
 
 
     return Transaction
+
+
+
+
+# update a transaction
+async def Service_updateTransaction(
+        user_id: int,
+        transaction_id: int,
+        session: AsyncSession,
+        data: TransactionUpdate
+):
+
+    existUser = await Repo_getUser(user_id, session)
+
+    if not existUser:
+        raise HTTPException(status_code=404 , detail="user not found")
+
+    updateTransaction = await Repo_UpdateTransaction(user_id, transaction_id, session, UpdateData=data)
+
+    return updateTransaction
+
+
+
+
+
+# delete transaction
+async def Service_deleteTransaction(
+        user_id: int,
+        transaction_id: int,
+        session: AsyncSession
+):
+
+    await Repo_deleteTransaction(user_id, transaction_id, session)
+
+    return

@@ -42,3 +42,10 @@ class TransactionQuery(BaseModel):
     fromDate: datetime | None = None
     toDate : datetime | None = None
     page: int = Field(default=1)
+
+
+
+
+class TransactionUpdate(BaseModel):
+    amount: Decimal | None = None
+    description: str | None = None

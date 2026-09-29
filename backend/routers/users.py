@@ -2,8 +2,8 @@ from decimal import Decimal
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from schemas.transactions import NewTransaction, ReturnResponse, TransactionQuery, TransactionResponse
-from services.transactions import Service_getAtransaction, Service_getStats, Service_getTransactions, Service_newTransaction
+from schemas.transactions import NewTransaction, ReturnResponse, TransactionQuery, TransactionResponse, TransactionUpdate
+from services.transactions import Service_deleteTransaction, Service_getAtransaction, Service_getStats, Service_getTransactions, Service_newTransaction, Service_updateTransaction
 from services.users import Service_CreateUser, Service_checkUser, Service_getUser
 from database.db import get_db
 from schemas.users import UserResponse, UserCreate, ValidateLogin
@@ -111,3 +111,36 @@ async def getAtransaction(
     TranData = await Service_getAtransaction( user_id, transaction_id, session)
 
     return TranData
+
+
+
+
+# update a transaction
+@router.patch("/{user_id}/transactions/{transaction_id}")
+async def updateTransaction( 
+    user_id: int,
+    transaction_id: int,
+    data: TransactionUpdate,
+    session: AsyncSession = Depends(get_db)
+):
+
+    updatedTran = await Service_updateTransaction(user_id, transaction_id, session=session, data=data)
+
+    return updatedTran
+
+
+
+
+
+# delete a transaction
+@router.delete("/{user_id}/transactions/{transaction_id}")
+async def deleteTransaction(
+    user_id: int,
+    transaction_id: int,
+    session: AsyncSession = Depends(get_db)
+):
+
+    await Service_deleteTransaction(user_id, transaction_id, session)
+    return {
+        "status":"transaction deleted"
+    }

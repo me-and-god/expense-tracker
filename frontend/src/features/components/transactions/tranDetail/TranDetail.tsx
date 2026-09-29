@@ -1,7 +1,9 @@
 "use client";
 
 
+import { DeleteTransaction, UpdateTransaction } from "@/features/DBquery/queries";
 import { Check, SquarePen, Trash, X } from "lucide-react";
+import { redirect } from "next/navigation";
 import { useState } from "react";
 
 
@@ -20,11 +22,59 @@ type Props = {
 
 const TranDetail = ( {Transaction}: Props) => {
     const [ update, setUpdate ] = useState(false);
+    const [ done, setDone ] = useState(false);
+    const [ deleted, setDeleted ] = useState(false);
+
+
+    // function for update transaction and then redirect to transactin page
+    async function updateTran(formData: FormData) {
+        const amount = formData.get("amount");
+        const description = formData.get("description");
+
+        const data = {
+            data: {
+                user_id: Transaction.user_id,
+                transaction_id: Transaction.id,
+                amount: amount === null ? undefined : Number(amount),
+                description: description === null ? undefined : String(description),
+            },
+        };
+
+        if (amount !== null || description !== null) {
+            const updateResponse = await UpdateTransaction(data);
+
+            if (updateResponse.status === 200) {
+                setDone(true);
+
+                setTimeout(() => {
+                    redirect(`/${Transaction.user_id}/transactions`)
+                }, 2000);
+            }
+        }
+    };
+
+
+
+
+    // function for deleting the transaction
+    async function deleteTran() {
+        const deleteResponse = await DeleteTransaction({user_id: Transaction.user_id, transaction_id: Transaction.id})
+
+        if (deleteResponse.status === 200 ) {
+            setDeleted(true);
+
+            setTimeout(() => {
+                redirect(`/${Transaction.user_id}/transactions`)
+            }, 2000);
+        }
+    };
+
+
 
   return (
     <div>
       
-      <form  action="" className="">
+      <form  action={updateTran} className="">
         <p className="text-center text-[24px] md:text-[30px] font-extrabold">Transaction Detail</p>
 
         <div className="p-5 md:p-15 md:px-20 flex flex-col  gap-5 md:gap-7">
@@ -63,7 +113,7 @@ const TranDetail = ( {Transaction}: Props) => {
 
           <div className="flex gap-4 md:gap-10 items-center">
             <p className="text-[22px] md:text-[24px] font-bold ">Created at:</p>
-            <p className="text-2xl font-bold text-gray-400">{Transaction.created_at.slice(0, 10)}</p>
+            <p className="text-2xl font-bold text-gray-400">{Transaction?.created_at?.slice(0, 10)}</p>
           </div>
         </div>
 
@@ -92,7 +142,7 @@ const TranDetail = ( {Transaction}: Props) => {
                         <p className="text-[18px] md:text-[22px]">update</p>
                     </button>
 
-                    <button className="flex justify-center items-center gap-2 md:gap-3 p-1 md:p-2  px-3 md:px-4 bg-red-600 text-white font-bold rounded-[5px] hover:bg-white md:border-3 border-red-600 hover:text-red-600 transition-all duration-150">
+                    <button onClick={deleteTran} className="flex justify-center items-center gap-2 md:gap-3 p-1 md:p-2  px-3 md:px-4 bg-red-600 text-white font-bold rounded-[5px] hover:bg-white md:border-3 border-red-600 hover:text-red-600 transition-all duration-150">
                         <Trash strokeWidth={3} size={24} className="md:hidden"/>
                         <Trash strokeWidth={3} size={40} className="hidden md:flex"/>
                         <p className="text-[18px] md:text-[22px]">delete</p>
@@ -112,6 +162,28 @@ const TranDetail = ( {Transaction}: Props) => {
         }
 
       </div>
+
+      {
+        done === true && (
+            <div id="overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-md">
+              <div className=" flex flex-col gap-3 md:gap-10 justify-center items-center p-5 md:p-10 rounded-2xl bg-white shadow-2xl">
+                <h2 className="text-xl font-semibold text-gray-900"><Check size={256} color="#23be42" strokeWidth={3} /></h2>
+                <p className="mt-2 text-[18px] md:text-[22px] font-semibold text-gray-600">Transactions updated</p>
+              </div>
+            </div>
+        )
+      }
+
+      {
+        deleted === true && (
+            <div id="overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-md">
+              <div className=" flex flex-col gap-3 md:gap-10 justify-center items-center p-5 md:p-10 rounded-2xl bg-white shadow-2xl">
+                <h2 className="text-xl font-semibold text-gray-900"><Trash color="#df3a3a" size={156} strokeWidth={3}/></h2>
+                <p className="mt-2 text-[18px] md:text-[22px] font-semibold text-gray-600">Transactions deleted</p>
+              </div>
+            </div>
+        )
+      }
 
     </div>
   )

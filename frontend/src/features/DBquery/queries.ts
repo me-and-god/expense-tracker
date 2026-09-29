@@ -162,3 +162,111 @@ export async function getTransactionData( ID : TransProps) {
 
     return data
 }
+
+
+
+
+
+
+
+
+
+
+
+// update a transaction
+type updateData = {
+    data: {
+        user_id: number;
+        transaction_id: number;
+        amount?: number;
+        description?: string;
+    }
+};
+
+export async function UpdateTransaction({data}: updateData) {
+
+    const response = await fetch(`http://127.0.0.1:8000/user/${data.user_id}/transactions/${data.transaction_id}`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            amount: data.amount,
+            description: data.description,
+        })
+    })
+
+    const updateData = await response.json()
+
+    if (!response.ok) {
+        if (response.status === 404 ) {
+            return {
+                "error": "check valid user or transaction detail"
+            }
+        }
+
+        if (response.status != 404 ) {
+            return {
+                "error": updateData.detail[0].ctx.error
+            }
+        }
+    }
+
+
+    return {
+        "data":updateData,
+        "status":response.status
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+// delete a transaction
+
+type delteTran = {
+    user_id: number;
+    transaction_id: number;
+};
+
+
+export async function DeleteTransaction({user_id, transaction_id}: delteTran) {
+
+    const response = await fetch(`http://127.0.0.1:8000/user/${user_id}/transactions/${transaction_id}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type":"application/json"
+        }
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+        if (response.status === 404 ) {
+            return {
+                "error": "check user and transaction credentials"
+            }
+        }
+
+        if (response.status != 404 ) {
+            return {
+                "error": "somthing went wrong, try again"
+            }
+        }
+    };
+
+
+    return {
+        "result": result.status,
+        "status": response.status
+    }
+
+}

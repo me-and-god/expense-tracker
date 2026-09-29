@@ -1,9 +1,9 @@
 from math import ceil
 
-from sqlalchemy import String, and_, cast, insert, or_, select, func
+from sqlalchemy import String, and_, cast, delete, insert, or_, select, func, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from schemas.transactions import NewTransaction, TransactionQuery, TransactionResponse
+from schemas.transactions import NewTransaction, TransactionQuery, TransactionResponse, TransactionUpdate
 from models.transactions import Transaction
 
 
@@ -159,5 +159,55 @@ async def Repo_getAtransaction(
     )
 
     result = await session.execute(stmt)
+    return result.scalar_one_or_none()
+
+
+
+
+
+# update transaction
+async def Repo_UpdateTransaction(
+        user_id: int,
+        transaction_id: int,
+        session: AsyncSession,
+        UpdateData: TransactionUpdate
+):
+    update_data = UpdateData.model_dump(exclude_unset=False)
+    update_data["updated_at"] = func.now()
+
+    stmt = update(Transaction).where(
+        and_(
+            Transaction.user_id == user_id,
+            Transaction.id == transaction_id
+        )
+    ).values(**update_data).returning(Transaction)
+
+    result = await session.execute(stmt)
+    await session.commit()
 
     return result.scalar_one_or_none()
+    
+
+    
+
+
+
+
+# delete transaction 
+async def Repo_deleteTransaction(
+        user_id: int,
+        transaction_id: int,
+        session: AsyncSession
+):
+
+    stmt = delete(Transaction).where(
+        and_(
+            Transaction.user_id == user_id,
+            Transaction.id == transaction_id
+        )
+    )
+
+    await session.execute(stmt)
+    await session.commit()
+
+    return
