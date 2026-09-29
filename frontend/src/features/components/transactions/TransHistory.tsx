@@ -29,10 +29,10 @@ type TransactionItem = {
 type props = {
     data : {
         user_id: number,
-        search: string,
-        from: string,
-        to: string,
-        page: number,
+        search?: string,
+        from?: string,
+        to?: string,
+        page?: number,
     }
 }
 

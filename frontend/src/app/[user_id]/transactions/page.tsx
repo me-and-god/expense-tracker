@@ -26,9 +26,9 @@ const TransactionPage = async({ params, searchParams}: PageParams) => {
   console.log(pageNo)
   const data = {
     user_id,
-    search: filter.search ?? undefined,
-    from: filter.from ?? undefined,
-    to: filter.to ?? undefined,
+    search: filter.search,
+    from: filter.from ,
+    to: filter.to ,
     page: pageNo,
   };
 
