@@ -3,3 +3,35 @@
 .btn-black {
     @apply text-[15px] md:text-[20px] bg-black text-white hover:bg-white hover:text-black font-semibold p-1 px-2 md:p-1 md:px-4 rounded-[5px] border-2 md:border-3 hover:border-emerald-600 cursor-pointer
 }
+
+.animate-open-sidebar {
+    animation: animateOpenBar 0.3s ease forwards;
+}
+
+.animate-close-sidebar {
+    animation: animateCloseBar 0.3s ease forwards;
+}
+
+@keyframes animateOpenBar {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes animateCloseBar {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    to {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+}

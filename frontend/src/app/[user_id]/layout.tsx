@@ -1,26 +1,27 @@
-import Header from "@/features/components/dashboard/Header"
-import { ReactNode } from "react"
+import { ReactNode } from "react";
 import { getUserById } from "@/features/DBquery/queries";
-
+import DashboardShell from "./DashboardShell";
 
 type PageProps = {
     children: ReactNode;
-    params: Promise<{ user_id: string }>;
+    params: Promise<{ user_id: number }>;
 };
 
-const layout = async({ children,params }: PageProps) => {
+const Layout = async ({ children, params }: PageProps) => {
 
-    const { user_id } = await params;
-    const id = Number(user_id);
+    const UserId = await params;
+    const id = Number(UserId.user_id);
+
     const user = await getUserById(id);
 
-    
     return (
-        <div>
-            <Header user={user} />
+        <DashboardShell
+            user={user}
+            userId={id}
+        >
             {children}
-        </div>
+        </DashboardShell>
     );
 };
 
-export default layout;
+export default Layout;

@@ -33,7 +33,7 @@ const TransactionPage = async({ params, searchParams}: PageParams) => {
   };
 
   return (
-    <div className="px-5 md:px-20">
+    <div className="px-5 md:px-20 w-full h-full">
 
         <div className="flex justify-between  items-center">
             <p className="text-2xl md:text-4xl font-bold tracking-wide p-3 md:p-10 ">Transactions</p>
