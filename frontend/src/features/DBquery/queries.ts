@@ -3,7 +3,7 @@
 
 // get user by id
 export async function getUserById(id: number) {
-    const response = await fetch(`http://127.0.0.1:8000/user/${id}`)
+    const response = await fetch(`https://expense-tracker-cydq.onrender.com/user/${id}`)
 
     if (!response.ok) {
         const err = response.status
@@ -26,7 +26,7 @@ type Props = {
 
 export async function getUserStats( {id}: Props) {
 
-    const response = await fetch(`http://127.0.0.1:8000/user/${id}/dashboard`)
+    const response = await fetch(`https://expense-tracker-cydq.onrender.com/user/${id}/dashboard`)
     const stats = await response.json()
 
     if (!response.ok) {
@@ -60,7 +60,7 @@ type PageProps = {
 
 export async function getTransactions(  data  : PageProps ) {
 
-    const response = await fetch('http://127.0.0.1:8000/user/transactions', {
+    const response = await fetch('https://expense-tracker-cydq.onrender.com/user/transactions', {
         method: "POST",
         headers: {
             "Content-Type":"application/json"
@@ -113,7 +113,7 @@ type TransactionData = {
 
 export async function AddTransaction( { user_id, Data } : TransactionData) {
     
-    const response = await fetch(`http://127.0.0.1:8000/user/transaction`, {
+    const response = await fetch(`https://expense-tracker-cydq.onrender.com/user/transaction`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -151,7 +151,7 @@ type TransProps = {
 };
 
 export async function getTransactionData( ID : TransProps) {
-    const response = await fetch(`http://127.0.0.1:8000/user/${ID.user_id}/transaction/${ID.transaction_id}`);
+    const response = await fetch(`https://expense-tracker-cydq.onrender.com/user/${ID.user_id}/transaction/${ID.transaction_id}`);
     const data = await response.json();
 
     if (!response.ok) {
@@ -185,7 +185,7 @@ type updateData = {
 
 export async function UpdateTransaction({data}: updateData) {
 
-    const response = await fetch(`http://127.0.0.1:8000/user/${data.user_id}/transactions/${data.transaction_id}`, {
+    const response = await fetch(`https://expense-tracker-cydq.onrender.com/${data.user_id}/transactions/${data.transaction_id}`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json",
@@ -240,7 +240,7 @@ type delteTran = {
 
 export async function DeleteTransaction({user_id, transaction_id}: delteTran) {
 
-    const response = await fetch(`http://127.0.0.1:8000/user/${user_id}/transactions/${transaction_id}`, {
+    const response = await fetch(`https://expense-tracker-cydq.onrender.com/user/${user_id}/transactions/${transaction_id}`, {
         method: "DELETE",
         headers: {
             "Content-Type":"application/json"

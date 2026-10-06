@@ -11,7 +11,7 @@ type LoginProp = {
 
 export async function CheckLogin( data: LoginProp) {
     const response = await fetch(
-        "http://127.0.0.1:8000/user/login",
+        "https://expense-tracker-cydq.onrender.com/user/login",
         {
             method: "POST",
             headers: {

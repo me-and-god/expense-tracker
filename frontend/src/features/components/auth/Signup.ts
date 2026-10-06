@@ -10,7 +10,7 @@ type SignUpProp = {
 export async function SignupNewUser(data : SignUpProp) {
 
     const response = await fetch(
-        "http://127.0.0.1:8000/user",
+        "https://expense-tracker-cydq.onrender.com/user",
         {
             method: "POST",
             headers: {
