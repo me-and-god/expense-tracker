@@ -185,7 +185,7 @@ type updateData = {
 
 export async function UpdateTransaction({data}: updateData) {
 
-    const response = await fetch(`https://expense-tracker-cydq.onrender.com/${data.user_id}/transactions/${data.transaction_id}`, {
+    const response = await fetch(`https://expense-tracker-cydq.onrender.com/user/${data.user_id}/transactions/${data.transaction_id}`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json",
