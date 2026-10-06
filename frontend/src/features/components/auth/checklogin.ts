@@ -25,8 +25,9 @@ export async function CheckLogin( data: LoginProp) {
     )
 
     if (response.ok) {
-        const user = await response.json()
-        redirect(`/${user.id}/dashboard`)
+        const user = await response.json();
+        const id = Number(user.id)
+        redirect(`/${id}/dashboard`)
 
     } else if (!response.ok) {
         const err = await response.json()

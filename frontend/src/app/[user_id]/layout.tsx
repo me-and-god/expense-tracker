@@ -4,7 +4,7 @@ import DashboardShell from "./DashboardShell";
 
 type PageProps = {
     children: ReactNode;
-    params: Promise<{ user_id: number }>;
+    params: Promise<{ user_id: string }>;
 };
 
 const Layout = async ({ children, params }: PageProps) => {
